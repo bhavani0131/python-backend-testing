@@ -20,9 +20,9 @@ db_write_config = {
 
 # 👀 Reader (Read Replica Endpoint)
 db_read_config = {
-    'host': 'reader.cdwg0suic5ew.us-east-1.rds.amazonaws.com',
+    'host': 'readreplica.cgt0ou804vkm.us-east-1.rds.amazonaws.com',
     'user': 'admin',
-    'password': 'Cloud123',
+    'password': 'password123',
     'database': 'dev'
 }
 
