@@ -54,6 +54,8 @@ def index():
 
 @app.route('/users', methods=['GET'])
 def get_users():
+    conn = None
+    cursor = None
     try:
         conn = get_read_connection()
         cursor = conn.cursor(dictionary=True)
@@ -72,12 +74,16 @@ def get_users():
     except Error as err:
         return jsonify({'error': str(err)}), 500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 @app.route('/users/<int:user_id>', methods=['GET'])
 def get_user(user_id):
+    conn = None
+    cursor = None
     try:
         conn = get_read_connection()
         cursor = conn.cursor(dictionary=True)
@@ -99,8 +105,10 @@ def get_user(user_id):
     except Error as err:
         return jsonify({'error': str(err)}), 500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 # =========================
 # WRITE APIs (Master DB)
@@ -108,13 +116,15 @@ def get_user(user_id):
 
 @app.route('/users/add', methods=['POST'])
 def add_user():
-    data = request.json
+    data = request.json or {}
     name = data.get('name')
     email = data.get('email')
 
     if not name or not email:
         return jsonify({'error': 'Name and Email are required'}), 400
 
+    conn = None
+    cursor = None
     try:
         conn = get_write_connection()
         cursor = conn.cursor()
@@ -127,19 +137,23 @@ def add_user():
     except Error as err:
         return jsonify({'error': str(err)}), 500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 @app.route('/users/update/<int:user_id>', methods=['PUT'])
 def update_user(user_id):
-    data = request.json
+    data = request.json or {}
     name = data.get('name')
     email = data.get('email')
 
     if not name or not email:
         return jsonify({'error': 'Name and Email are required'}), 400
 
+    conn = None
+    cursor = None
     try:
         conn = get_write_connection()
         cursor = conn.cursor()
@@ -157,12 +171,16 @@ def update_user(user_id):
     except Error as err:
         return jsonify({'error': str(err)}), 500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 
 @app.route('/users/delete/<int:user_id>', methods=['DELETE'])
 def delete_user(user_id):
+    conn = None
+    cursor = None
     try:
         conn = get_write_connection()
         cursor = conn.cursor()
@@ -177,8 +195,10 @@ def delete_user(user_id):
     except Error as err:
         return jsonify({'error': str(err)}), 500
     finally:
-        cursor.close()
-        conn.close()
+        if cursor:
+            cursor.close()
+        if conn and conn.is_connected():
+            conn.close()
 
 # =========================
 # ENTRY POINT
