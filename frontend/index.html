@@ -105,7 +105,6 @@
       <th>Name</th>
       <th>Email</th>
       <th>Actions</th>
-      <th>City</th>
     </tr>
   </table>
 
@@ -120,13 +119,14 @@
   <p id="formMsg"></p>
 
   <script>
+    // ⚠️ Replace 44.199.227.185 with the PUBLIC IP of your backend EC2 instance!
     const backendIP = "http://100.59.32.113:5000";
 
     // Load Users
     function loadUsers() {
       const table = document.getElementById("userTable");
 
-      // Reset table
+      // Reset table header
       table.innerHTML = `
         <tr>
           <th>ID</th>
@@ -138,7 +138,10 @@
 
       fetch(`${backendIP}/users`)
         .then(res => res.json())
-        .then(users => {
+        .then(response => {
+          // Extract array from response.data to match Flask JSON payload
+          const users = response.data || response; 
+
           users.forEach(user => {
             const row = table.insertRow();
 
@@ -157,7 +160,7 @@
             actionCell.appendChild(deleteBtn);
           });
         })
-        .catch(err => console.error(err));
+        .catch(err => console.error("Error loading users:", err));
     }
 
     // Delete User
@@ -172,7 +175,7 @@
         alert(result.message || result.error);
         loadUsers();
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error deleting user:", err));
     }
 
     // Add User
@@ -195,7 +198,7 @@
         document.getElementById("userForm").reset();
         loadUsers();
       })
-      .catch(err => console.error(err));
+      .catch(err => console.error("Error adding user:", err));
     });
 
     // Auto load on page start
