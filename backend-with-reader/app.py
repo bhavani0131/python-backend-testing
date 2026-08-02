@@ -15,7 +15,7 @@ db_write_config = {
     'host': 'database-1.cgt0ou804vkm.us-east-1.rds.amazonaws.com',
     'user': 'admin',
     'password': 'password123',
-    'database': 'database-1'
+    'database': 'dev'
 }
 
 # 👀 Reader (Read Replica Endpoint)
