@@ -119,7 +119,6 @@
   <p id="formMsg"></p>
 
   <script>
-    // ⚠️ Replace 44.199.227.185 with the PUBLIC IP of your backend EC2 instance!
     const backendIP = "http://100.59.32.113:5000";
 
     // Load Users
@@ -139,10 +138,10 @@
       fetch(`${backendIP}/users`)
         .then(res => res.json())
         .then(response => {
-          // Extract array from response.data to match Flask JSON payload
-          const users = response.data || response; 
+          // Extract the array from the JSON 'data' key
+          const usersList = response.data || response; 
 
-          users.forEach(user => {
+          usersList.forEach(user => {
             const row = table.insertRow();
 
             row.insertCell(0).innerText = user.id;
